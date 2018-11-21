@@ -15,6 +15,6 @@ To have an overview about the various output this library can produce, here are 
 
 ## installation
 * Install [Bodmer/TFT_eSPI](https://github.com/Bodmer/TFT_eSPI) library and make sure examples are running.
-* Download zip and move extraced directory to the arduino libraries folder.
+* Download zip and move extraced directory to the arduino libraries folder or use the Library Manager and select `install from zip`
 ## test
 * From the arduino file menu select examples TFTShape
