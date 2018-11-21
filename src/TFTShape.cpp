@@ -14,16 +14,16 @@ void TFTShape::dumpVerts() {
   Serial.println();
 }
 #endif
-CR::CR(int16_t color) {
+CR::CR(uint16_t color) {
   c=color;
 }
-CR::CR(int16_t f,int16_t t) {
-  from=f;
-  to=t;
+CR::CR(int16_t fromHue,int16_t toHue) {
+  from=fromHue;
+  to=toHue;
 }
-uint16_t CR::color565(uint8_t r, uint8_t g, uint8_t b){
-  return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
-}
+//uint16_t CR::color565(uint8_t r, uint8_t g, uint8_t b){
+//  return ((r & 0xF8) << 8) | ((g & 0xFC) << 3) | (b >> 3);
+//}
 void CR::HSVtoRGB(float& fR, float& fG, float& fB, float& fH, float& fS, float& fV) {
   float fC = fV * fS; // Chroma
   float fHPrime = fmod(fH / 60.0, 6);
@@ -52,10 +52,13 @@ void CR::RGBtoBW(float& fR, float& fG, float& fB, float& fH, float& fS, float& f
   float avg=(fR+fG+fB)/3.;
   fR=avg; fG=avg; fB=avg;
 }
-int16_t CR::colorFromHSV(int16_t hue,float s, float v) {
+uint16_t CR::colorFromHSV(int16_t hue,float s, float v) {
   float fR,fG,fB,fH=hue,fS=s,fV=v;
   HSVtoRGB(fR, fG,  fB, fH,fS , fV);
-  return color565(fR*255,fG*255,fB*255);
+  int r=fR*31.99,g=fG*63.99,b=fB*31.99;
+  //Serial.printf("%d %d %d\n",r,g,b);
+  return ((r<<11) |(g<<5)|b );
+  //return color565(fR*255,fG*255,fB*255);
 }
 VEC2::VEC2():x(0),y(0) {}
 VEC2::VEC2(float a, float b):x(a),y(b) {}
@@ -182,7 +185,7 @@ void TFTShape::fill(TFT_eSPI* display, int x0, int y0, TFTShape& s, const CR & c
       p-=pivot;
       s.setRotation((-atan2(p.x,p.y)*180/M_PI)+originalRotation);
     }
-    int16_t c=color.c;
+    uint16_t c=color.c;
     if(color.from>=0) {
       c=CR::colorFromHSV(map(i,0,numVerts,color.from,color.to),1,1);
     }
@@ -243,7 +246,7 @@ void TFTShape::fillH(TFT_eSPI* display, int x0, int y0, const CR & color,int eve
       }
     }
     qsort(polyints, ix, sizeof(int), [](const void *a, const void *b){return (*(const int *)a) - (*(const int *)b);});
-    int16_t c=color.c;
+    uint16_t c=color.c;
     if(color.from>=0) {
       c=CR::colorFromHSV(map(scanline,minx,maxx,color.from,color.to),1,1);
     }
@@ -310,7 +313,7 @@ void TFTShape::fill(TFT_eSPI* display, int x0, int y0, CR color,int every) {
       }
       qsort(polyints, ix, sizeof(int), [](const void *a, const void *b){return (*(const int *)a) - (*(const int *)b);});
       // int16_t==slower !!! qsort(polyints, ix, sizeof(int16_t), [](const void *a, const void *b){return (*(const int16_t *)a) - (*(const int16_t *)b);});
-      int16_t c=color.c;
+      uint16_t c=color.c;
       if(color.from>=0) {
         c=CR::colorFromHSV(map(scanline,miny,maxy,color.from,color.to),1,1);
       }

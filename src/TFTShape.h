@@ -21,15 +21,16 @@
 #define TRANSFORM(a)trans(a);
 
 struct CR{
-  int16_t c;
+  uint16_t c;
   int16_t from=-1;
   int16_t to=-1;
-  CR(int16_t color);
+  CR(uint16_t color);
   CR(int16_t f,int16_t t);
-  static uint16_t color565(uint8_t r, uint8_t g, uint8_t b);
+  //static uint16_t color565(uint8_t r, uint8_t g, uint8_t b);
   static void HSVtoRGB(float& fR, float& fG, float& fB, float& fH, float& fS, float& fV);
   static void RGBtoBW(float& fR, float& fG, float& fB, float& fH, float& fS, float& fV);
-  static int16_t colorFromHSV(int16_t hue,float s, float v);
+  //static uint16_t colorFromHSV2(int16_t hue,float s, float v);
+  static uint16_t colorFromHSV(int16_t hue,float s, float v);
 };
 
 struct VEC2;
