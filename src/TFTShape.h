@@ -1,11 +1,11 @@
 /***************************************************
   Arduino TFT 2D graphics library targeted at ESP8266
-  and ESP32 based boards.
-  created by JLA 11/2018
+  and ESP32 based boards using the TFT_eSPI library (https://github.com/Bodmer/TFT_eSPI).
+  created by JLA 11/2018 (https://github.com/androdlang/TFTShape).
  ****************************************************/
 #ifndef TFTSHAPE_H
 #define TFTSHAPE_H
-//#include <ego.h>
+
 #include <TFT_eSPI.h>
 #define min(a,b)(a<b?a:b)
 #define max(a,b)(a>b?a:b)
@@ -45,32 +45,24 @@ struct VEC2 {
   VEC2 &operator=(const VEC2 &v);
 };
 
-enum SHAPETYPE { ST_POLY, ST_NGON, ST_STAR, ST_LINE, ST_GRID, ST_ARC,ST_TURTLE, ST_UNKNOWN };
-enum BUFFERTYPE { BT_POINTS, BT_LINES, BT_LINESTRIP, BT_LINELOOP };
-
 class TFTShape {
-  SHAPETYPE stype;
-  VEC2 pivot; 			//pivot point for scaling and rotation
-  VEC2 scalefac=VEC2(1,1); 	//scale
-  VEC2 offset; //relative offset to drawing position
-  float rotation=0; //rotation degrees
-  bool rotationFixed=false; //rotate to pivot of parent shape
-  VEC2 sincos=VEC2(sin(rotation*M_PI/180),cos(rotation*M_PI/180));
-  VEC2 min; //updated via calcBounds
-  VEC2 dim; //updated via calcBounds
+ 
+  VEC2 pivot; 			            //pivot point for scaling and rotation
+  VEC2 scalefac=VEC2(1,1); 	    //scale
+  VEC2 offset;                  //relative offset of vertices
+  float rotation=0;             //rotation degrees
+  bool rotationFixed=false;     //if false: head to pivot of parent shape
+  VEC2 sincos=VEC2(sin(rotation*M_PI/180),cos(rotation*M_PI/180)); //updated on every rotation change
 protected:
   friend class TFTShapeBuilder;
-  friend class TFTLines;
-  BUFFERTYPE btype;
-  VEC2 *vertices=NULL;   //vertices buffer
-  int numVerts;      //num of vertices
+  VEC2 *vertices=NULL;          //vertices buffer
+  int numVerts;                 //number of vertices
   void drawOptimizedLine(TFT_eSPI*display,int x,int y,int x0,int y0, int x1,int y1, int textcolor);
-  VEC2 trans(VEC2 a);
+  VEC2 trans(VEC2 a);           //transpose function
 public:
   TFTShape(std::initializer_list<VEC2> verts);
   TFTShape();
   TFTShape( VEC2 * buffer, int numVerts);
-  TFTShape( TFTShape ** buffer, int shapes);
   void setPivot(int,int);
   void setRotation(float a);
   void setRotationBy(float a);
@@ -94,11 +86,11 @@ public:
   virtual void draw(TFT_eSPI* display, int x0, int y0, int16_t color);
   void draw(TFT_eSPI* display, int x0, int y0, TFTShape &, const CR & color,int every=1);
   void fill(TFT_eSPI* display, int x0, int y0, CR color,int every=1);
-  void fillDraw(TFT_eSPI* display, int x0, int y0,const CR & colorOutline, CR color,int every=1);
-  void fillDrawH(TFT_eSPI* display, int x0, int y0,const CR & colorOutline, CR color,int every=1);
-  void fillH(TFT_eSPI* display, int x0, int y0,const CR & color,int every=1);
   void fill(TFT_eSPI* display, int x0, int y0,TFTShape &, const CR & color,int every=1);
+  void fillH(TFT_eSPI* display, int x0, int y0,const CR & color,int every=1);
+  void fillDraw(TFT_eSPI* display, int x0, int y0,const CR & colorOutline, CR color,int every=1);
   void fillDraw(TFT_eSPI* display, int x0, int y0,TFTShape &, const CR & colorOutline, const CR & color,int every=1);
+  void fillDrawH(TFT_eSPI* display, int x0, int y0,const CR & colorOutline, CR color,int every=1);
   void fillDrawH(TFT_eSPI* display, int x0, int y0,TFTShape &, const CR & colorOutline, const CR & color,int every=1);
 
 #ifdef DEBUG  

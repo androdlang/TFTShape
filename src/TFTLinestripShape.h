@@ -1,11 +1,11 @@
 /***************************************************
   Arduino TFT 2D graphics library targeted at ESP8266
-  and ESP32 based boards.
-  created by JLA 11/2018
+  and ESP32 based boards using the TFT_eSPI library (https://github.com/Bodmer/TFT_eSPI).
+  created by JLA 11/2018 (https://github.com/androdlang/TFTShape).
  ****************************************************/
 #ifndef TFTLSSHAPE_H
 #define TFTLSSHAPE_H
-//#include "TFTShape.h"
+
 class TFTLinestripShape :public TFTShape{
   public:
   TFTLinestripShape(std::initializer_list<VEC2> verts) {
@@ -13,11 +13,8 @@ class TFTLinestripShape :public TFTShape{
     vertices = new VEC2[numVerts];
     std::copy(verts.begin(), verts.end(), vertices);
   }
-  TFTLinestripShape() {btype=BT_LINESTRIP;}
+  TFTLinestripShape() {}
   virtual void draw(TFT_eSPI* display, int x0, int y0, int16_t color);
-  //static TFTLinestripShape buildSpline(std::initializer_list<VEC2> verts,int steps);
-  //static TFTLinestripShape buildSpline(VEC2 * buffer ,int numVerts,int steps);
-  //static TFTLinestripShape buildSplineLoop(VEC2 * buffer,int numVerts,int steps);
   static VEC2 getSplinePoint(VEC2* points, int numPoints,float t, bool bLooped = false);
    
 };
