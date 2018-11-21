@@ -343,29 +343,6 @@ header("analog-clock");
     }
     footer();
   }
-  //****************************************
-void clock2() {
-header("analog-clock");
-  TFTShape dot=TFTShapeBuilder::buildNgon(3,8);
-  TFTShape face=TFTShapeBuilder::buildNgon(12,100);
-  //clock-face 
-  face.fill(&tft2,120,160,dot,TFT_GREY);
-  int pivy=35;
-  //hour-hand
-  TFTShape hand=TFTShapeBuilder::buildNgon(5,60);
-  hand.setScale(.08,.8); hand.setPivot(0,pivy); hand.setRotation(170);
-  hand.fill(&tft2,120,160-pivy,TFT_GREY);
-  //minutes-hand
-  hand.setScale(.08,1); hand.setRotation(240);
-  hand.fill(&tft2,120,160-pivy,TFT_LIGHTGREY);
-  //seconds-hand
-  hand.setScale(.03,1); hand.setRotation(30); 
-  hand.fill(&tft2,120,160-pivy,TFT_RED);
-  dot.fill(&tft2,120,160,TFT_RED);
-  dot.setScale(.4);
-  dot.fill(&tft2,120,160,TFT_DARKGREY);
-  footer();
-} 
   
   //****************************************
   void runTests() {
