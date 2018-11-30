@@ -6,6 +6,7 @@ TFTShape uses, as the name states, a shape based concept. Shapes are containers 
 Following classes and subclasses are available:
 * TFTShape - represents points and closed lines (polygons)
 * TFTLineShape - represents individual lines
+* TFTSplineShape - represents points interpreted as B-splines (open and looped splines)
 * TFTLinestripShape - represent contiguous lines (not closed)
 * TFTShapeBuilder - Factory to create special shapes, ie. grids,splines,stars, n-gons etc.
 
