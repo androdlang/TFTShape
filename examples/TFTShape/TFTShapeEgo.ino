@@ -1,5 +1,5 @@
 //uncomment for use with ODROID
-#define USE_ODROID
+//#define USE_ODROID
 
 #ifdef USE_ODROID
   #include "ego.h"
